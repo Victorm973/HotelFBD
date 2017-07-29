@@ -11,10 +11,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import br.com.projeto.entidades.Reserva;
-import br.com.projeto.entidades.Servico;
 import br.com.projeto.util.ConnectionFactory;
 import br.com.projeto.util.SqlUtilReserva;
-import br.com.projeto.util.SqlUtilServico;
 
 public class ReservaDao implements IReservaDao {
 
