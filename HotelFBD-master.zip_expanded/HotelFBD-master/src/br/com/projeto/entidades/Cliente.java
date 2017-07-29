@@ -17,10 +17,18 @@ public class Cliente {
     private String uf;
     private String cep;
     
-    private double debito;
 
     public Cliente() {
     }
+
+	public Cliente(Long id, String nome, String cpf) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.cpf = cpf;
+	}
+
+
 
 	public Long getId() {
 		return id;
@@ -104,14 +112,5 @@ public class Cliente {
 		this.cep = cep;
 	}
 
-	public double getDebito() {
-		return debito;
-	}
-
-	public void setDebito(double debito) {
-		this.debito = debito;
-	}
-
-   
-    
+	
 }

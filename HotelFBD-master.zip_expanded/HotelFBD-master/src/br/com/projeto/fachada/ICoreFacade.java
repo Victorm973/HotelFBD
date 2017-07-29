@@ -25,8 +25,8 @@ public interface ICoreFacade {
     public List<VinculoClienteServico> getVinculoClienteServico();
     
     public boolean salvarOuEditarAcomodacao(Acomodacao acomodacao);
-    public Servico buscarAcomodacaoPorId(Long id);
-    public List<Servico> getAcomodacao();
+    public Acomodacao buscarAcomodacaoPorId(Long id);
+    public List<Acomodacao> getAcomodacao();
     
     public boolean salvarOuEditarReserva(Reserva reserva);
     public Reserva buscarReservaPorId(Long id);

@@ -48,7 +48,7 @@ public class CoreFacade implements ICoreFacade{
 
     @Override
     public List<Cliente> getClientes() {
-		return null;
+		return clienteBusiness.getAll();
     }
 
 	@Override
@@ -66,8 +66,7 @@ public class CoreFacade implements ICoreFacade{
 
 	@Override
 	public List<Servico> getServico() {
-		// TODO Auto-generated method stub
-		return null;
+		return servicoBusiness.getAll();
 	}
 
 	@Override
@@ -94,15 +93,14 @@ public class CoreFacade implements ICoreFacade{
 	}
 
 	@Override
-	public Servico buscarAcomodacaoPorId(Long id) {
+	public Acomodacao buscarAcomodacaoPorId(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Servico> getAcomodacao() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Acomodacao> getAcomodacao() {
+		return acomodacaoBusiness.getAll();
 	}
 
 	@Override
@@ -119,8 +117,7 @@ public class CoreFacade implements ICoreFacade{
 
 	@Override
 	public List<Reserva> getReserva() {
-		// TODO Auto-generated method stub
-		return null;
+		return reservaBusiness.getAll();
 	}
     
 }

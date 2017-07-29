@@ -5,11 +5,16 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import br.com.projeto.entidades.Reserva;
+import br.com.projeto.entidades.Servico;
 import br.com.projeto.util.ConnectionFactory;
 import br.com.projeto.util.SqlUtilReserva;
+import br.com.projeto.util.SqlUtilServico;
 
 public class ReservaDao implements IReservaDao {
 
@@ -29,12 +34,12 @@ public class ReservaDao implements IReservaDao {
     public Reserva salvar(Reserva reserva)throws Exception{
 
         try {
-            statment = conexaoPost.prepareStatement(SqlUtilReserva.INSERT_RESERVA_ALL);
+            
+        	statment = conexaoPost.prepareStatement(SqlUtilReserva.INSERT_RESERVA_ALL);
             statment.setString(1, reserva.getCpfCliente());
             statment.setLong(2, reserva.getIdAcomodacao());
             statment.setDate(3, (Date) reserva.getInicioReserva());
             statment.setDate(4, (Date) reserva.getFimReserva());
-            statment.setString(5, reserva.getCpfCliente());
             
             statment.execute();
            
@@ -43,6 +48,9 @@ public class ReservaDao implements IReservaDao {
             
             result.next();
             reserva.setId(new Long(result.getInt("id")));
+            
+            JOptionPane.showMessageDialog(null, "Acomodação reservada com Sucesso!!!");
+            
             return reserva;
             
             
@@ -70,7 +78,32 @@ public class ReservaDao implements IReservaDao {
 
 	@Override
 	public List<Reserva> getAll() {
-		// TODO Auto-generated method stub
+		try {
+			statment = conexaoPost.prepareStatement(SqlUtilReserva.SELECT_RESEVA_ALL);
+
+			ResultSet rs = statment.executeQuery();
+
+			List<Reserva> reserva = new ArrayList<Reserva>();
+
+			while(rs.next()){
+				reserva.add(new Reserva(rs.getLong("id"), rs.getDate("data_inicio"), rs.getDate("data_termino"), rs.getLong("acomodacao_id"), rs.getString("cliente_cpf")));
+			}
+
+			rs.close();
+
+			return reserva;	
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			try {
+				conexaoPost.rollback();
+			} catch (SQLException ex1) {
+				ex1.printStackTrace();
+			}
+		}
+
+
 		return null;
 	}
 

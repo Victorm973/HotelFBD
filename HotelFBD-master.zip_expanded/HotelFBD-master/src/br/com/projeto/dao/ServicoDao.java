@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import br.com.projeto.entidades.Servico;
 import br.com.projeto.util.ConnectionFactory;
@@ -28,6 +31,7 @@ public class ServicoDao implements IServicoDao {
     public Servico salvar(Servico servico)throws Exception{
 
         try {
+        	
             statment = conexaoPost.prepareStatement(SqlUtilServico.INSERT_SERVICO_ALL);
             statment.setInt(1, servico.getCodigo());
             statment.setDouble(2, servico.getValor());
@@ -40,6 +44,10 @@ public class ServicoDao implements IServicoDao {
             
             result.next();
             servico.setId(new Long(result.getInt("id")));
+            
+            JOptionPane.showMessageDialog(null, "Serviço Cadastrado com Sucesso!!!");
+
+            
             return servico;
             
             
@@ -69,7 +77,32 @@ public class ServicoDao implements IServicoDao {
 
 	@Override
 	public List<Servico> getAll() {
-		// TODO Auto-generated method stub
+		try {
+			statment = conexaoPost.prepareStatement(SqlUtilServico.SELECT_SERVICO_ALL);
+
+			ResultSet rs = statment.executeQuery();
+
+			List<Servico> servico = new ArrayList<Servico>();
+
+			while(rs.next()){
+				servico.add(new Servico(rs.getLong("id"), rs.getInt("codigo"), rs.getDouble("valor"), rs.getString("descricao")));
+			}
+
+			rs.close();
+
+			return servico;	
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			try {
+				conexaoPost.rollback();
+			} catch (SQLException ex1) {
+				ex1.printStackTrace();
+			}
+		}
+
+
 		return null;
 	}
 

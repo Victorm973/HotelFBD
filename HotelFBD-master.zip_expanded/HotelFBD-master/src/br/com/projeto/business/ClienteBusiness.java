@@ -4,6 +4,7 @@ package br.com.projeto.business;
 import br.com.projeto.dao.ClienteDao;
 import br.com.projeto.dao.IClienteDao;
 import br.com.projeto.entidades.Cliente;
+
 import java.util.List;
 
 public class ClienteBusiness implements IClienteBusiness {
@@ -41,7 +42,12 @@ public class ClienteBusiness implements IClienteBusiness {
 
     @Override
     public List<Cliente> getAll() {
-		return null;
+    	try {		
+    		return clienteDao.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return null;
     }
 
 }

@@ -41,8 +41,7 @@ public class ServicoBusiness implements IServicoBusiness {
 
 	@Override
 	public List<Servico> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return servicoDao.getAll();
 	}
 
 }

@@ -8,6 +8,10 @@ public class SqlUtilCliente {
     
     public static final String SELECT_CLIENTE_ULTIMO_REGISTRO = "SELECT * FROM cliente ORDER BY id DESC LIMIT 1";
     
+    public static final String SELECT_CLIENTE_ALL = "SELECT * from cliente;";
+    
+    public static final String SELECT_CLIENTE_CPF = "SELECT * from cliente where cpf = (?);";
+
     
     private SqlUtilCliente() {
     }

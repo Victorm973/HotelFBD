@@ -13,6 +13,17 @@ public class Reserva {
 	public Reserva() {
 	}
 
+	public Reserva(Long id, Date inicioReserva, Date fimReserva, Long idAcomodacao, String cpfCliente) {
+		super();
+		this.id = id;
+		this.inicioReserva = inicioReserva;
+		this.fimReserva = fimReserva;
+		this.idAcomodacao = idAcomodacao;
+		this.cpfCliente = cpfCliente;
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}

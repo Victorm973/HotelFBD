@@ -12,6 +12,17 @@ public class Acomodacao {
 
 	}
 
+	public Acomodacao(Long id, int numero, double valor_diaria, String descricao, boolean isDisponivel) {
+		super();
+		this.id = id;
+		this.numero = numero;
+		this.valor_diaria = valor_diaria;
+		this.descricao = descricao;
+		this.isDisponivel = isDisponivel;
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}

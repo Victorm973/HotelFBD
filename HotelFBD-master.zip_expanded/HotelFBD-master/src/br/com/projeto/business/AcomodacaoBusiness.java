@@ -40,8 +40,12 @@ public class AcomodacaoBusiness implements IAcomodacaoBusiness {
 
 	@Override
 	public List<Acomodacao> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		try {		
+    		return acomodacaoDao.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return null;
+    }
 
 }

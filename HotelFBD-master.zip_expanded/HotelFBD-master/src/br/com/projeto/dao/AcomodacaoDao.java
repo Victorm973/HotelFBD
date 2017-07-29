@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import br.com.projeto.entidades.Acomodacao;
 import br.com.projeto.util.ConnectionFactory;
@@ -28,12 +31,13 @@ public class AcomodacaoDao implements IAcomodacaoDao {
     public Acomodacao salvar(Acomodacao acomodacao)throws Exception{
 
         try {
+        	
             statment = conexaoPost.prepareStatement(SqlUtilAcomodacao.INSERT_ACOMODACAO_ALL);
             statment.setInt(1, acomodacao.getNumero());
             statment.setDouble(2, acomodacao.getValor_diaria());
             statment.setString(3, acomodacao.getDescricao());
             statment.setBoolean(4, acomodacao.isDisponivel());
-            
+                        
             statment.execute();
            
             statment = conexaoPost.prepareStatement(SqlUtilAcomodacao.SELECT_ACOMODACAO_ULTIMO_REGISTRO);
@@ -41,11 +45,16 @@ public class AcomodacaoDao implements IAcomodacaoDao {
             
             result.next();
             acomodacao.setId(new Long(result.getInt("id")));
+            
+            JOptionPane.showMessageDialog(null, "Acomodação Cadastrada com Sucesso!!!");
+            
             return acomodacao;
             
             
         } catch (Exception ex) {
+        	
             ex.printStackTrace();
+            
             try {
                 conexaoPost.rollback();
             } catch (SQLException ex1) {
@@ -69,7 +78,32 @@ public class AcomodacaoDao implements IAcomodacaoDao {
 
 	@Override
 	public List<Acomodacao> getAll() {
-		// TODO Auto-generated method stub
+		try {
+			statment = conexaoPost.prepareStatement(SqlUtilAcomodacao.SELECT_ACOMODACAO_ALL);
+
+			ResultSet rs = statment.executeQuery();
+
+			List<Acomodacao> acomodacao = new ArrayList<Acomodacao>();
+
+			while(rs.next()){
+				acomodacao.add(new Acomodacao(rs.getLong("id"), rs.getInt("numero"),rs.getDouble("valor_diaria"), rs.getString("descricao"), rs.getBoolean("disponivel")));
+			}
+
+			rs.close();
+
+			return acomodacao;	
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			try {
+				conexaoPost.rollback();
+			} catch (SQLException ex1) {
+				ex1.printStackTrace();
+			}
+		}
+
+
 		return null;
 	}
 

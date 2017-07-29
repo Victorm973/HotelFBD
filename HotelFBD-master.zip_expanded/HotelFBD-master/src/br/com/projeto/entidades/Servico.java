@@ -9,6 +9,18 @@ public class Servico {
 	
 	public Servico() {
 	}
+	
+	
+
+	public Servico(Long id, int codigo, double valor, String descricao) {
+		super();
+		this.id = id;
+		this.codigo = codigo;
+		this.valor = valor;
+		this.descricao = descricao;
+	}
+
+
 
 	public Long getId() {
 		return id;

@@ -41,8 +41,7 @@ public class ReservaBusiness implements IReservaBusiness {
 
 	@Override
 	public List<Reserva> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return reservaDao.getAll();
 	}
 
 }
