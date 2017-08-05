@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import br.com.projeto.entidades.Cliente;
 import br.com.projeto.util.ConnectionFactory;
 import br.com.projeto.util.SqlUtilCliente;
+import br.com.projeto.view.MenuPrincipal;
 
 public class ClienteDao implements IClienteDao {
 
@@ -47,7 +48,7 @@ public class ClienteDao implements IClienteDao {
 				statment.setString(7, cliente.getCidade());
 				statment.setString(8, cliente.getUf());
 				statment.setString(9, cliente.getCep());
-				
+
 				statment.execute();
 
 				statment = conexaoPost.prepareStatement(SqlUtilCliente.SELECT_CLIENTE_ULTIMO_REGISTRO);
@@ -55,7 +56,7 @@ public class ClienteDao implements IClienteDao {
 
 				result.next();
 				cliente.setId(new Long(result.getInt("id")));
-				
+
 				JOptionPane.showMessageDialog(null, "Cliente Cadastrado com Sucesso!!!");
 
 				return cliente;
@@ -63,7 +64,7 @@ public class ClienteDao implements IClienteDao {
 			}else{
 				JOptionPane.showMessageDialog(null, "ERRO! \n Campos Vazios!!!");
 			}
-				
+
 
 
 		} catch (Exception ex) {
@@ -82,6 +83,36 @@ public class ClienteDao implements IClienteDao {
 
 	@Override
 	public boolean editar(Cliente cliente) {
+		try {
+
+			statment = conexaoPost.prepareStatement(SqlUtilCliente.UPDDATE_CLIENTE);
+
+			statment.setString(1, cliente.getNome());
+			statment.setString(2, cliente.getIdentidade());
+			statment.setString(3, cliente.getTelefone());
+			statment.setString(4, cliente.getRua());
+			statment.setString(5, cliente.getBairro());
+			statment.setString(6, cliente.getCidade());
+			statment.setString(7, cliente.getUf());
+			statment.setString(8, cliente.getCep());
+			statment.setString(9, cliente.getCpf());
+
+			statment.execute();
+
+			JOptionPane.showMessageDialog(null, "Cliente Atualizado com Sucesso!!!");
+
+			return true;
+
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+
+			try {
+				conexaoPost.rollback();
+			} catch (SQLException ex1) {
+				ex1.printStackTrace();
+			}
+		}
 		return false;
 	}
 
@@ -96,15 +127,16 @@ public class ClienteDao implements IClienteDao {
 		try {
 			statment = conexaoPost.prepareStatement(SqlUtilCliente.SELECT_CLIENTE_ALL);
 
-			ResultSet rs = statment.executeQuery();
+			result = statment.executeQuery();
 
 			List<Cliente> cliente = new ArrayList<Cliente>();
 
-			while(rs.next()){
-				cliente.add(new Cliente(rs.getLong("id"), rs.getString("nome"), rs.getString("cpf")));
+			while(result.next()){
+				cliente.add(new Cliente(result.getLong("id"), result.getString("nome"), result.getString("cpf"), result.getString("rg")
+						, result.getString("telefone"), result.getString("rua"), result.getString("bairro"), result.getString("cidade"), result.getString("uf"), result.getString("cep")));
 			}
 
-			rs.close();
+			result.close();
 
 			return cliente;	
 

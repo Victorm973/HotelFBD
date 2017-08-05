@@ -22,6 +22,9 @@ import javax.swing.JTextField;
 import br.com.projeto.entidades.Acomodacao;
 import br.com.projeto.entidades.Cliente;
 import br.com.projeto.entidades.Reserva;
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
+import javax.swing.JScrollPane;
 
 public class UtilCriaTelas {
 
@@ -88,81 +91,141 @@ public class UtilCriaTelas {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
-		JTabbedPane tabbedPaneReserva = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPaneReserva.setBounds(10, 78, 464, 302);
-		frame.getContentPane().add(tabbedPaneReserva);
+		JTabbedPane tabbedPaneCliente = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPaneCliente.setBounds(10, 78, 464, 302);
+		frame.getContentPane().add(tabbedPaneCliente);
 
-		JPanel panelRealizarReserva = new JPanel();
-		tabbedPaneReserva.addTab("Reservar Acomodação", null, panelRealizarReserva, null);
-		panelRealizarReserva.setLayout(null);
+		JPanel panelCliente = new JPanel();
+		tabbedPaneCliente.addTab("Cadastrar Novo Cliente", null, panelCliente, null);
+		panelCliente.setLayout(null);
 
-		JLabel lblCpfDoCliente2 = new JLabel("CPF do Cliente");
-		lblCpfDoCliente2.setBounds(49, 17, 99, 14);
-		panelRealizarReserva.add(lblCpfDoCliente2);
+		JLabel lblNome = new JLabel("Nome");
+		lblNome.setBounds(10, 11, 46, 14);
+		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		panelCliente.add(lblNome);
 
-		textFieldReservaCPFCliente = new JTextField();
-		textFieldReservaCPFCliente.setBounds(158, 14, 109, 20);
-		panelRealizarReserva.add(textFieldReservaCPFCliente);
-		textFieldReservaCPFCliente.setColumns(10);
+		textFieldClienteNome = new JTextField();
+		textFieldClienteNome.setBounds(40, 8, 400, 20);
+		panelCliente.add(textFieldClienteNome);
+		textFieldClienteNome.setColumns(10);
 
-		JLabel lblDataDeEntrada = new JLabel("Data de Entrada");
-		lblDataDeEntrada.setBounds(39, 42, 109, 14);
-		panelRealizarReserva.add(lblDataDeEntrada);
+		JLabel lblCpf = new JLabel("CPF");
+		lblCpf.setBounds(10, 36, 46, 14);
+		panelCliente.add(lblCpf);
 
-		textFieldReservaDataEntrada = new JTextField();
-		textFieldReservaDataEntrada.setBounds(158, 39, 109, 20);
-		panelRealizarReserva.add(textFieldReservaDataEntrada);
-		textFieldReservaDataEntrada.setColumns(10);
+		textFieldClienteCPF = new JTextField();
+		textFieldClienteCPF.setBounds(40, 33, 102, 20);
+		panelCliente.add(textFieldClienteCPF);
+		textFieldClienteCPF.setColumns(11);
 
-		JLabel lblDataDeSaida = new JLabel("Data de Saida Prevista");
-		lblDataDeSaida.setBounds(10, 67, 145, 14);
-		panelRealizarReserva.add(lblDataDeSaida);
+		JLabel lblRg = new JLabel("RG");
+		lblRg.setBounds(153, 36, 46, 14);
+		panelCliente.add(lblRg);
 
-		textFieldReservaDataSaida = new JTextField();
-		textFieldReservaDataSaida.setBounds(158, 64, 109, 20);
-		panelRealizarReserva.add(textFieldReservaDataSaida);
-		textFieldReservaDataSaida.setColumns(10);
+		textFieldClienteRG = new JTextField();
+		textFieldClienteRG.setBounds(174, 33, 102, 20);
+		panelCliente.add(textFieldClienteRG);
+		textFieldClienteRG.setColumns(10);
 
-		JLabel lblIDDeAcomodao = new JLabel("ID da Acomodação");
-		lblIDDeAcomodao.setBounds(29, 92, 129, 14);
-		panelRealizarReserva.add(lblIDDeAcomodao);
+		JLabel lblTelefone = new JLabel("Telefone");
+		lblTelefone.setBounds(286, 36, 51, 14);
+		panelCliente.add(lblTelefone);
 
-		textFieldReservaIDAcomodacao = new JTextField();
-		textFieldReservaIDAcomodacao.setBounds(158, 89, 109, 20);
-		panelRealizarReserva.add(textFieldReservaIDAcomodacao);
-		textFieldReservaIDAcomodacao.setColumns(10);
+		textFieldClienteTelefone = new JTextField();
+		textFieldClienteTelefone.setBounds(347, 33, 93, 20);
+		panelCliente.add(textFieldClienteTelefone);
+		textFieldClienteTelefone.setColumns(10);
 
-		JButton btnRealizarReserva = new JButton("Realizar Reserva");
-		btnRealizarReserva.setBounds(303, 17, 135, 39);
-		panelRealizarReserva.add(btnRealizarReserva);
+		JLabel lblEndereco = new JLabel("Endereco");
+		lblEndereco.setBounds(197, 80, 72, 14);
+		lblEndereco.setBackground(Color.LIGHT_GRAY);
+		panelCliente.add(lblEndereco);
+
+		JLabel lblRua = new JLabel("Rua");
+		lblRua.setBounds(10, 113, 25, 14);
+		panelCliente.add(lblRua);
+
+		textFieldClienteRua = new JTextField();
+		textFieldClienteRua.setBounds(40, 110, 400, 20);
+		panelCliente.add(textFieldClienteRua);
+		textFieldClienteRua.setColumns(10);
+
+		JLabel lblBairro = new JLabel("Bairro");
+		lblBairro.setBounds(3, 138, 46, 14);
+		panelCliente.add(lblBairro);
+
+		textFieldClienteBairro = new JTextField();
+		textFieldClienteBairro.setBounds(40, 135, 181, 20);
+		panelCliente.add(textFieldClienteBairro);
+		textFieldClienteBairro.setColumns(10);
+
+		JLabel lblCidade = new JLabel("Cidade");
+		lblCidade.setBounds(231, 138, 63, 14);
+		panelCliente.add(lblCidade);
+
+		textFieldClienteCidade = new JTextField();
+		textFieldClienteCidade.setBounds(277, 135, 163, 20);
+		panelCliente.add(textFieldClienteCidade);
+		textFieldClienteCidade.setColumns(10);
+
+		JLabel lblCep = new JLabel("Cep");
+		lblCep.setBounds(10, 163, 46, 14);
+		panelCliente.add(lblCep);
+
+		textFieldClienteCep = new JTextField();
+		textFieldClienteCep.setBounds(40, 160, 181, 20);
+		panelCliente.add(textFieldClienteCep);
+		textFieldClienteCep.setColumns(8);
+
+		JLabel lblUf = new JLabel("UF");
+		lblUf.setBounds(231, 166, 46, 14);
+		panelCliente.add(lblUf);
+
+		textFieldClienteUF = new JTextField();
+		textFieldClienteUF.setBounds(277, 160, 25, 20);
+		panelCliente.add(textFieldClienteUF);
+		textFieldClienteUF.setColumns(2);
+
+		JButton btnClienteRealizarCadastro = new JButton("Realizar Cadastro");
+		btnClienteRealizarCadastro.setBounds(174, 215, 138, 23);
+		panelCliente.add(btnClienteRealizarCadastro);
+
+	
+		JPanel panelClientePesquisa = new JPanel();
+		tabbedPaneCliente.addTab("Pesquisar Cliente", null, panelClientePesquisa, null);
+		panelClientePesquisa.setLayout(null);
+
+		JLabel lblDigiteOCpf = new JLabel("Digite o CPF do Cliente");
+		lblDigiteOCpf.setBounds(10, 11, 151, 14);
+		panelClientePesquisa.add(lblDigiteOCpf);
+
+		textFieldClienteBuscarCPF = new JTextField();
+		textFieldClienteBuscarCPF.setBounds(144, 8, 137, 20);
+		panelClientePesquisa.add(textFieldClienteBuscarCPF);
+		textFieldClienteBuscarCPF.setColumns(11);
+
+		JButton btnClienteBuscar = new JButton("Buscar");
+		btnClienteBuscar.setBounds(291, 7, 89, 23);
+		panelClientePesquisa.add(btnClienteBuscar);
 		
-		
-		
-		textFieldReservaListaApts = new JTextField();
-		textFieldReservaListaApts.setBounds(10, 145, 430, 118);
-		panelRealizarReserva.add(textFieldReservaListaApts);
-		textFieldReservaListaApts.setColumns(10);
+		JScrollPane scrollPaneListarClientes = new JScrollPane();
+		scrollPaneListarClientes.setBounds(10, 39, 430, 183);
+		panelClientePesquisa.add(scrollPaneListarClientes);
 
-		JLabel lblAcomodaesDisponveis = new JLabel("Acomodações Disponíveis");
-		lblAcomodaesDisponveis.setBounds(158, 120, 164, 14);
-		panelRealizarReserva.add(lblAcomodaesDisponveis);
-		
-		JButton btnReservaListarAcomodacoes = new JButton("Listar Acomodações");
-		btnReservaListarAcomodacoes.setBounds(303, 80, 135, 39);
-		panelRealizarReserva.add(btnReservaListarAcomodacoes);
+		JList textAreaClienteInfoClienteBusca = new JList();
+		scrollPaneListarClientes.setViewportView(textAreaClienteInfoClienteBusca);
+		textAreaClienteInfoClienteBusca.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JPanel panelReservasRealizadas = new JPanel();
-		tabbedPaneReserva.addTab("Lista de Reservas Realizadas", null, panelReservasRealizadas, null);
-		panelReservasRealizadas.setLayout(null);
+		JButton btnClienteListarTodos = new JButton("Listar Todos os Clientes");
+		btnClienteListarTodos.setBounds(10, 233, 172, 23);
+		panelClientePesquisa.add(btnClienteListarTodos);
+		tabbedPaneCliente.setVisible(false);
 
-		JTextArea textAreaReservaListaFeitas = new JTextArea();
-		textAreaReservaListaFeitas.setBounds(10, 11, 430, 201);
-		panelReservasRealizadas.add(textAreaReservaListaFeitas);
-		
-		JButton btnReservaListarReservas = new JButton("Listar Reservas");
-		btnReservaListarReservas.setBounds(164, 223, 125, 40);
-		panelReservasRealizadas.add(btnReservaListarReservas);
-		tabbedPaneReserva.setVisible(false);
+
+		JButton btnClienteEditarInformacoes = new JButton("Editar Informações");
+		btnClienteEditarInformacoes.setBounds(279, 233, 161, 23);
+		panelClientePesquisa.add(btnClienteEditarInformacoes);
+		tabbedPaneCliente.setVisible(false);
 
 
 	}

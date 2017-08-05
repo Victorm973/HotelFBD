@@ -8,16 +8,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 import br.com.projeto.entidades.Acomodacao;
 import br.com.projeto.entidades.Cliente;
@@ -29,6 +34,7 @@ import br.com.projeto.fachada.CoreFacade;
 
 
 public class MenuPrincipal {
+	
 
 	private JFrame frame;
 	private JTextField textFieldClienteNome;
@@ -63,6 +69,7 @@ public class MenuPrincipal {
 	private Reserva reserva;
 	private VinculoClienteServico vinculo;
 	private static ICoreFacade fachada;
+	
 
 	/**
 	 * Launch the application.
@@ -281,10 +288,15 @@ public class MenuPrincipal {
 		btnClienteBuscar.setBounds(291, 7, 89, 23);
 		panelClientePesquisa.add(btnClienteBuscar);
 
-		JTextArea textAreaClienteInfoClienteBusca = new JTextArea();
-		textAreaClienteInfoClienteBusca.setBounds(10, 39, 430, 183);
-		textAreaClienteInfoClienteBusca.setEditable(false);
-		panelClientePesquisa.add(textAreaClienteInfoClienteBusca);
+		JScrollPane scrollPaneListarClientes = new JScrollPane();
+		scrollPaneListarClientes.setBounds(10, 39, 430, 183);
+		panelClientePesquisa.add(scrollPaneListarClientes);
+
+		DefaultListModel<String> modelo = new DefaultListModel<String>();
+		JList<String> textAreaClienteInfoClienteBusca = new JList<String>(modelo);
+
+		scrollPaneListarClientes.setViewportView(textAreaClienteInfoClienteBusca);
+		textAreaClienteInfoClienteBusca.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JButton btnClienteListarTodos = new JButton("Listar Todos os Clientes");
 		btnClienteListarTodos.setBounds(10, 233, 172, 23);
@@ -298,19 +310,11 @@ public class MenuPrincipal {
 
 				List<Cliente> cliente = new ArrayList<Cliente>();
 				cliente = fachada.getClientes();
-
-				String global = "";
-
+				modelo.clear();
+				
 				for(int i = 0; i < cliente.size();i++){
-
-					String s;
-					s = cliente.get(i).getId() + "\t" + cliente.get(i).getCpf() + "\t\t" + cliente.get(i).getNome() + "\n";
-
-					global += s;
-
-					textAreaClienteInfoClienteBusca.setText("");
-
-					textAreaClienteInfoClienteBusca.setText(global);
+					
+					modelo.addElement(cliente.get(i).getId() + "     -     " + cliente.get(i).getCpf() + "     -     " + cliente.get(i).getNome() + "\n");
 				}
 
 			}
@@ -321,6 +325,37 @@ public class MenuPrincipal {
 		btnClienteEditarInformacoes.setBounds(279, 233, 161, 23);
 		panelClientePesquisa.add(btnClienteEditarInformacoes);
 		tabbedPaneCliente.setVisible(false);
+
+		btnClienteEditarInformacoes.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				List<Cliente> cliente = new ArrayList<Cliente>();
+				cliente = fachada.getClientes();
+
+				for(int i = 0; i < cliente.size();i++){
+					
+					if(textAreaClienteInfoClienteBusca.getSelectedValue().contains(cliente.get(i).getCpf())){
+						
+						
+						TelaCliente telaCliente = new TelaCliente();
+						
+						telaCliente.getTextFieldClienteNome().setText(cliente.get(i).getNome());;
+						telaCliente.getTextFieldClienteCPF().setText(cliente.get(i).getCpf());
+						telaCliente.getTextFieldClienteRG().setText(cliente.get(i).getIdentidade());
+						telaCliente.getTextFieldClienteTelefone().setText(cliente.get(i).getTelefone());
+						telaCliente.getTextFieldClienteRua().setText(cliente.get(i).getRua());
+						telaCliente.getTextFieldClienteBairro().setText(cliente.get(i).getBairro());
+						telaCliente.getTextFieldClienteCidade().setText(cliente.get(i).getCidade());
+						telaCliente.getTextFieldClienteUF().setText(cliente.get(i).getUf());
+						telaCliente.getTextFieldClienteCep().setText(cliente.get(i).getCep());
+						
+						
+					}
+				}
+			}
+		});
 
 		// FINAL TABBED PANE CLIENTE INICIO TABBED PANE SERVIÇOS
 
@@ -513,7 +548,7 @@ public class MenuPrincipal {
 		JButton btnRealizarReserva = new JButton("Realizar Reserva");
 		btnRealizarReserva.setBounds(303, 17, 135, 39);
 		panelRealizarReserva.add(btnRealizarReserva);
-		
+
 		btnRealizarReserva.addActionListener(new ActionListener() {
 
 			@Override
@@ -529,12 +564,14 @@ public class MenuPrincipal {
 
 				System.out.println(textFieldReservaDataEntrada.getText());
 
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 				try {
 					Date dateI = sdf.parse(strDataInicio);
-					java.sql.Date sqlDateI = new java.sql.Date(dateI.getTime());
-					reserva.setInicioReserva(sqlDateI);
+
+					Calendar c = Calendar.getInstance();
+					c.setTime(dateI);
+					reserva.setInicioReserva(dateI);
 
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -542,8 +579,7 @@ public class MenuPrincipal {
 
 				try {
 					Date dateF = sdf.parse(strDataFim);
-					java.sql.Date sqlDateF = new java.sql.Date(dateF.getTime());
-					reserva.setFimReserva(sqlDateF);
+					reserva.setFimReserva(dateF);
 
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -552,7 +588,7 @@ public class MenuPrincipal {
 			}
 		});
 
-		
+
 		textFieldReservaListaApts = new JTextField();
 		textFieldReservaListaApts.setBounds(10, 145, 430, 118);
 		panelRealizarReserva.add(textFieldReservaListaApts);
@@ -561,7 +597,7 @@ public class MenuPrincipal {
 		JLabel lblAcomodaesDisponveis = new JLabel("Acomodações Disponíveis");
 		lblAcomodaesDisponveis.setBounds(158, 120, 164, 14);
 		panelRealizarReserva.add(lblAcomodaesDisponveis);
-		
+
 		JButton btnReservaListarAcomodacoes = new JButton("Listar Acomodações");
 		btnReservaListarAcomodacoes.setBounds(303, 80, 135, 39);
 		panelRealizarReserva.add(btnReservaListarAcomodacoes);
@@ -573,16 +609,16 @@ public class MenuPrincipal {
 		JTextArea textAreaReservaListaFeitas = new JTextArea();
 		textAreaReservaListaFeitas.setBounds(10, 11, 430, 201);
 		panelReservasRealizadas.add(textAreaReservaListaFeitas);
-		
+
 		JButton btnReservaListarReservas = new JButton("Listar Reservas");
 		btnReservaListarReservas.setBounds(164, 223, 125, 40);
 		panelReservasRealizadas.add(btnReservaListarReservas);
-		
+
 		btnReservaListarReservas.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				List<Reserva> reserva = new ArrayList<Reserva>();
 				reserva = fachada.getReserva();
 
@@ -601,7 +637,7 @@ public class MenuPrincipal {
 				}
 			}
 		});
-		
+
 		tabbedPaneReserva.setVisible(false);
 
 
@@ -847,4 +883,6 @@ public class MenuPrincipal {
 			}
 		});
 	}
+
+		
 }

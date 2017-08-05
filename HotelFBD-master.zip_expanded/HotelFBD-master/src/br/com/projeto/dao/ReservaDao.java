@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -36,8 +37,9 @@ public class ReservaDao implements IReservaDao {
         	statment = conexaoPost.prepareStatement(SqlUtilReserva.INSERT_RESERVA_ALL);
             statment.setString(1, reserva.getCpfCliente());
             statment.setLong(2, reserva.getIdAcomodacao());
-            statment.setDate(3, (Date) reserva.getInicioReserva());
-            statment.setDate(4, (Date) reserva.getFimReserva());
+            
+            statment.setDate(3, new Date(reserva.getInicioReserva().getTime()));
+            statment.setDate(4, new Date(reserva.getFimReserva().getTime()));
             
             statment.execute();
            

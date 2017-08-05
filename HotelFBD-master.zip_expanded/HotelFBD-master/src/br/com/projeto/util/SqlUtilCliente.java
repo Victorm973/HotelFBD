@@ -11,6 +11,8 @@ public class SqlUtilCliente {
     public static final String SELECT_CLIENTE_ALL = "SELECT * from cliente;";
     
     public static final String SELECT_CLIENTE_CPF = "SELECT * from cliente where cpf = (?);";
+    
+    public static final String UPDDATE_CLIENTE = "UPDATE cliente set nome = ?, rg = ?, telefone = ?, rua = ?, bairro = ?, cidade = ?, uf = ?, cep = ? where cpf = (?);";
 
     
     private SqlUtilCliente() {

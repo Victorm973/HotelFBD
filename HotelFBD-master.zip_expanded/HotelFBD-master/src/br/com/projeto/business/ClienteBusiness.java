@@ -18,12 +18,12 @@ public class ClienteBusiness implements IClienteBusiness {
     @Override
     public boolean salvarOuEditar(Cliente cliente) {
         try {
-            if (cliente.getId() == null) {
+            if (cliente.getCpf() == null) {
                 cliente = clienteDao.salvar(cliente);
                 
                 return true;
             }
-            if (cliente.getId() != null) {
+            if (cliente.getCpf() != null) {
                 clienteDao.editar(cliente);
                 return true;
             }

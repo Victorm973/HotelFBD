@@ -16,7 +16,7 @@ public class Cliente {
     private String cidade;
     private String uf;
     private String cep;
-    
+        
 
     public Cliente() {
     }
@@ -29,6 +29,20 @@ public class Cliente {
 	}
 
 
+	public Cliente(Long id, String nome, String cpf, String identidade, String telefone, String rua, String bairro,
+			String cidade, String uf, String cep) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.cpf = cpf;
+		this.identidade = identidade;
+		this.telefone = telefone;
+		this.rua = rua;
+		this.bairro = bairro;
+		this.cidade = cidade;
+		this.uf = uf;
+		this.cep = cep;
+	}
 
 	public Long getId() {
 		return id;
@@ -111,6 +125,8 @@ public class Cliente {
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
+
+	
 
 	
 }
