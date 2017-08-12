@@ -16,59 +16,85 @@ import br.com.projeto.util.SqlUtilAcomodacao;
 public class AcomodacaoDao implements IAcomodacaoDao {
 
 	Connection conexaoPost;
-    PreparedStatement statment;
-    ResultSet result;
+	PreparedStatement statment;
+	ResultSet result;
 
-    public AcomodacaoDao() {
-        try {
-            conexaoPost = ConnectionFactory.getInstance(ConnectionFactory.TIPO_BASE_DADOS_POSTGRES);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public AcomodacaoDao() {
+		try {
+			conexaoPost = ConnectionFactory.getInstance(ConnectionFactory.TIPO_BASE_DADOS_POSTGRES);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    @Override
-    public Acomodacao salvar(Acomodacao acomodacao)throws Exception{
+	@Override
+	public Acomodacao salvar(Acomodacao acomodacao)throws Exception{
 
-        try {
-        	
-            statment = conexaoPost.prepareStatement(SqlUtilAcomodacao.INSERT_ACOMODACAO_ALL);
-            statment.setInt(1, acomodacao.getNumero());
-            statment.setDouble(2, acomodacao.getValor_diaria());
-            statment.setString(3, acomodacao.getDescricao());
-            statment.setBoolean(4, acomodacao.isDisponivel());
-                        
-            statment.execute();
-           
-            statment = conexaoPost.prepareStatement(SqlUtilAcomodacao.SELECT_ACOMODACAO_ULTIMO_REGISTRO);
-            result = statment.executeQuery();
-            
-            result.next();
-            acomodacao.setId(new Long(result.getInt("id")));
-            
-            JOptionPane.showMessageDialog(null, "Acomodação Cadastrada com Sucesso!!!");
-            
-            return acomodacao;
-            
-            
-        } catch (Exception ex) {
-        	
-            ex.printStackTrace();
-            
-            try {
-                conexaoPost.rollback();
-            } catch (SQLException ex1) {
-                ex1.printStackTrace();
-            }
-        }
-             throw new Exception("Erro....");
-    }
+		try {
+
+			statment = conexaoPost.prepareStatement(SqlUtilAcomodacao.INSERT_ACOMODACAO_ALL);
+			statment.setInt(1, acomodacao.getNumero());
+			statment.setDouble(2, acomodacao.getValor_diaria());
+			statment.setString(3, acomodacao.getDescricao());
+			statment.setBoolean(4, acomodacao.isDisponivel());
+
+			statment.execute();
+
+			statment = conexaoPost.prepareStatement(SqlUtilAcomodacao.SELECT_ACOMODACAO_ULTIMO_REGISTRO);
+			result = statment.executeQuery();
+
+			result.next();
+			acomodacao.setId(new Long(result.getInt("id")));
+
+			JOptionPane.showMessageDialog(null, "Acomodação Cadastrada com Sucesso!!!");
+
+			return acomodacao;
+
+
+		} catch (Exception ex) {
+
+			ex.printStackTrace();
+
+			try {
+				conexaoPost.rollback();
+			} catch (SQLException ex1) {
+				ex1.printStackTrace();
+			}
+		}
+		throw new Exception("Erro....");
+	}
 
 	@Override
 	public boolean editar(Acomodacao acomodacao) {
-		// TODO Auto-generated method stub
+
+		try{
+			statment = conexaoPost.prepareStatement(SqlUtilAcomodacao.UPDDATE_ACOMODACAO);
+
+			statment.setInt(1, acomodacao.getNumero());
+			statment.setDouble(2, acomodacao.getValor_diaria());
+			statment.setString(3, acomodacao.getDescricao());
+			statment.setLong(4, acomodacao.getId());
+
+			statment.execute();
+
+			JOptionPane.showMessageDialog(null, "Acomodação Atualizada com Sucesso!!!");
+
+			return true;
+
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+
+			try {
+				conexaoPost.rollback();
+			} catch (SQLException ex1) {
+				ex1.printStackTrace();
+			}
+		}
 		return false;
+
 	}
+
 
 	@Override
 	public Acomodacao buscarPorid(Long id) {

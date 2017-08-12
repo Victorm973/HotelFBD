@@ -8,7 +8,8 @@ public class SqlUtilServico {
 	
     public static final String SELECT_SERVICO_ALL = "SELECT * from servico;";
 
-    
+    public static final String UPDDATE_SERVICO = "UPDATE servico set valor = ?, descricao = ? where id = (?);";
+
     
     private SqlUtilServico() {
     }

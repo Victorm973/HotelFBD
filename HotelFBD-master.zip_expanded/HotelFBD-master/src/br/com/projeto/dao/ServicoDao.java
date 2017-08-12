@@ -65,7 +65,30 @@ public class ServicoDao implements IServicoDao {
 
 	@Override
 	public boolean editar(Servico servico) {
-		// TODO Auto-generated method stub
+		try {
+
+			statment = conexaoPost.prepareStatement(SqlUtilServico.UPDDATE_SERVICO);
+
+			statment.setDouble(1, servico.getValor());
+			statment.setString(2, servico.getDescricao());
+			statment.setLong(3, servico.getId());
+
+			statment.execute();
+
+			JOptionPane.showMessageDialog(null, "Servico Atualizado com Sucesso!!!");
+
+			return true;
+
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+
+			try {
+				conexaoPost.rollback();
+			} catch (SQLException ex1) {
+				ex1.printStackTrace();
+			}
+		}
 		return false;
 	}
 

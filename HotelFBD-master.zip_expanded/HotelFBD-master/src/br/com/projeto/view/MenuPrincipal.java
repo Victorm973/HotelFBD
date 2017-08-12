@@ -34,7 +34,7 @@ import br.com.projeto.fachada.CoreFacade;
 
 
 public class MenuPrincipal {
-	
+
 
 	private JFrame frame;
 	private JTextField textFieldClienteNome;
@@ -58,10 +58,7 @@ public class MenuPrincipal {
 	private JTextField textFieldReservaListaApts;
 	private JTextField textFieldAcomodacaoCadNum;
 	private JTextField textFieldAcomodacaoCadValor;
-	private JTextField textFieldAcomodaçãoBuscaEdit;
-	private JTextField textFieldAcomodacaoAlterarNum;
-	private JTextField textFieldAcomodacaoValorNovo;
-	private JLabel lblAcomoDescQuarto;
+
 
 	private Cliente cliente;
 	private Servico servico;
@@ -69,7 +66,7 @@ public class MenuPrincipal {
 	private Reserva reserva;
 	private VinculoClienteServico vinculo;
 	private static ICoreFacade fachada;
-	
+
 
 	/**
 	 * Launch the application.
@@ -246,6 +243,7 @@ public class MenuPrincipal {
 			public void actionPerformed(ActionEvent e1) {
 
 				cliente = new Cliente();
+				
 				cliente.setNome(textFieldClienteNome.getText());
 				cliente.setCpf(textFieldClienteCPF.getText());
 				cliente.setIdentidade(textFieldClienteRG.getText());
@@ -275,25 +273,12 @@ public class MenuPrincipal {
 		tabbedPaneCliente.addTab("Pesquisar Cliente", null, panelClientePesquisa, null);
 		panelClientePesquisa.setLayout(null);
 
-		JLabel lblDigiteOCpf = new JLabel("Digite o CPF do Cliente");
-		lblDigiteOCpf.setBounds(10, 11, 151, 14);
-		panelClientePesquisa.add(lblDigiteOCpf);
-
-		textFieldClienteBuscarCPF = new JTextField();
-		textFieldClienteBuscarCPF.setBounds(144, 8, 137, 20);
-		panelClientePesquisa.add(textFieldClienteBuscarCPF);
-		textFieldClienteBuscarCPF.setColumns(11);
-
-		JButton btnClienteBuscar = new JButton("Buscar");
-		btnClienteBuscar.setBounds(291, 7, 89, 23);
-		panelClientePesquisa.add(btnClienteBuscar);
-
 		JScrollPane scrollPaneListarClientes = new JScrollPane();
 		scrollPaneListarClientes.setBounds(10, 39, 430, 183);
 		panelClientePesquisa.add(scrollPaneListarClientes);
 
-		DefaultListModel<String> modelo = new DefaultListModel<String>();
-		JList<String> textAreaClienteInfoClienteBusca = new JList<String>(modelo);
+		DefaultListModel<String> modeloCliente = new DefaultListModel<String>();
+		JList<String> textAreaClienteInfoClienteBusca = new JList<String>(modeloCliente);
 
 		scrollPaneListarClientes.setViewportView(textAreaClienteInfoClienteBusca);
 		textAreaClienteInfoClienteBusca.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -310,11 +295,11 @@ public class MenuPrincipal {
 
 				List<Cliente> cliente = new ArrayList<Cliente>();
 				cliente = fachada.getClientes();
-				modelo.clear();
-				
+				modeloCliente.clear();
+
 				for(int i = 0; i < cliente.size();i++){
-					
-					modelo.addElement(cliente.get(i).getId() + "     -     " + cliente.get(i).getCpf() + "     -     " + cliente.get(i).getNome() + "\n");
+
+					modeloCliente.addElement(cliente.get(i).getId() + "     |     " + cliente.get(i).getCpf() + "     |     " + cliente.get(i).getNome() + "\n");
 				}
 
 			}
@@ -336,11 +321,17 @@ public class MenuPrincipal {
 
 				for(int i = 0; i < cliente.size();i++){
 					
+					if(textAreaClienteInfoClienteBusca.isSelectionEmpty()){
+						JOptionPane.showMessageDialog(null, "Nenhum Cliente Selecionado!!! \n Selecione algum Cliente!");
+						break;
+					}
+					
 					if(textAreaClienteInfoClienteBusca.getSelectedValue().contains(cliente.get(i).getCpf())){
-						
-						
-						TelaCliente telaCliente = new TelaCliente();
-						
+
+
+						TelaAlterarCliente telaCliente = new TelaAlterarCliente();
+
+						telaCliente.setId(cliente.get(i).getId());
 						telaCliente.getTextFieldClienteNome().setText(cliente.get(i).getNome());;
 						telaCliente.getTextFieldClienteCPF().setText(cliente.get(i).getCpf());
 						telaCliente.getTextFieldClienteRG().setText(cliente.get(i).getIdentidade());
@@ -350,7 +341,6 @@ public class MenuPrincipal {
 						telaCliente.getTextFieldClienteCidade().setText(cliente.get(i).getCidade());
 						telaCliente.getTextFieldClienteUF().setText(cliente.get(i).getUf());
 						telaCliente.getTextFieldClienteCep().setText(cliente.get(i).getCep());
-						
 						
 					}
 				}
@@ -463,13 +453,18 @@ public class MenuPrincipal {
 		tabbedPaneServicos.addTab("Lista de Serviços Disponiveis", null, panelListaServico, null);
 		panelListaServico.setLayout(null);
 
-		JTextArea textAreaServicoListaServicos = new JTextArea();
-		textAreaServicoListaServicos.setEditable(false);
-		textAreaServicoListaServicos.setBounds(0, 0, 455, 220);
-		panelListaServico.add(textAreaServicoListaServicos);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 455, 220);
+		panelListaServico.add(scrollPane);
+
+		DefaultListModel<String> modeloServico = new DefaultListModel<String>();
+		JList<String> textAreaServicoListaServicos = new JList<String>(modeloServico);
+
+		textAreaServicoListaServicos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPane.setViewportView(textAreaServicoListaServicos);
 
 		JButton btnServicoListar = new JButton("Listar");
-		btnServicoListar.setBounds(173, 231, 122, 23);
+		btnServicoListar.setBounds(33, 231, 122, 23);
 		panelListaServico.add(btnServicoListar);
 
 		btnServicoListar.addActionListener(new ActionListener() {
@@ -480,18 +475,40 @@ public class MenuPrincipal {
 				List<Servico> servico = new ArrayList<Servico>();
 				servico = fachada.getServico();
 
-				String global = "";
+				modeloServico.clear();
 
 				for(int i = 0; i < servico.size();i++){
 
-					String s;
-					s = servico.get(i).getId() + "\t" + servico.get(i).getCodigo() + "\t" + servico.get(i).getValor() + "\t" + servico.get(i).getDescricao() +"\n";
+					modeloServico.addElement(servico.get(i).getId() + "     |     " + servico.get(i).getCodigo() + "     |     " + servico.get(i).getValor() + "     |     " + servico.get(i).getDescricao() + "\n");
+				}
+			}
+		});
 
-					global += s;
+		JButton btnAlterarServico = new JButton("Alterar Serviço");
+		btnAlterarServico.setBounds(296, 231, 122, 23);
+		panelListaServico.add(btnAlterarServico);
 
-					textAreaServicoListaServicos.setText("");
+		btnAlterarServico.addActionListener(new ActionListener() {
 
-					textAreaServicoListaServicos.setText(global);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				List<Servico> servico = new ArrayList<Servico>();
+				servico = fachada.getServico();
+
+				for(int i = 0; i < servico.size();i++){
+
+					if(textAreaServicoListaServicos.getSelectedValue().contains(Long.toString(servico.get(i).getId()))){
+
+
+						TelaAlterarServico telaServico = new TelaAlterarServico();
+
+						telaServico.getTextFieldServicoCodigoServ().setText(Integer.toString(servico.get(i).getCodigo()));;
+						telaServico.getTextFieldServicoValorServ().setText(Double.toString(servico.get(i).getValor()));
+						telaServico.getTextAreaServicoDescriçãoServ().setText(servico.get(i).getDescricao());
+						telaServico.setId(servico.get(i).getId());
+
+					}
 				}
 			}
 		});
@@ -606,13 +623,23 @@ public class MenuPrincipal {
 		tabbedPaneReserva.addTab("Lista de Reservas Realizadas", null, panelReservasRealizadas, null);
 		panelReservasRealizadas.setLayout(null);
 
-		JTextArea textAreaReservaListaFeitas = new JTextArea();
-		textAreaReservaListaFeitas.setBounds(10, 11, 430, 201);
-		panelReservasRealizadas.add(textAreaReservaListaFeitas);
+		JScrollPane scrollPaneReserva = new JScrollPane();
+		scrollPaneReserva.setBounds(10, 29, 430, 200);
+		panelReservasRealizadas.add(scrollPaneReserva);
+
+		DefaultListModel<String> modeloReserva = new DefaultListModel<String>();
+		JList<String> textAreaReservaListaFeitas = new JList<String>(modeloReserva);
+
+		textAreaReservaListaFeitas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPaneReserva.setViewportView(textAreaReservaListaFeitas);
 
 		JButton btnReservaListarReservas = new JButton("Listar Reservas");
-		btnReservaListarReservas.setBounds(164, 223, 125, 40);
+		btnReservaListarReservas.setBounds(31, 240, 125, 23);
 		panelReservasRealizadas.add(btnReservaListarReservas);
+
+		JButton btnReservaAtualizar = new JButton("Atualizar Reserva");
+		btnReservaAtualizar.setBounds(303, 240, 135, 23);
+		panelReservasRealizadas.add(btnReservaAtualizar);
 
 		btnReservaListarReservas.addActionListener(new ActionListener() {
 
@@ -622,19 +649,43 @@ public class MenuPrincipal {
 				List<Reserva> reserva = new ArrayList<Reserva>();
 				reserva = fachada.getReserva();
 
-				String global = "";
+				modeloReserva.clear();
 
 				for(int i = 0; i < reserva.size();i++){
 
-					String s;
-					s = reserva.get(i).getId() + "\t" + reserva.get(i).getInicioReserva() + "\t" + reserva.get(i).getFimReserva() + "\t" + reserva.get(i).getIdAcomodacao() +"\t"+ reserva.get(i).getCpfCliente() +"\n";
-
-					global += s;
-
-					textAreaReservaListaFeitas.setText("");
-
-					textAreaReservaListaFeitas.setText(global);
+					modeloReserva.addElement(reserva.get(i).getId() + "     |     " + reserva.get(i).getInicioReserva() + "     |     " + reserva.get(i).getFimReserva() + "     |     " + reserva.get(i).getCpfCliente() + "     |     " + reserva.get(i).getIdAcomodacao() + "\n");
 				}
+
+			}
+		});
+
+		btnReservaAtualizar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				List<Reserva> reserva = new ArrayList<Reserva>();
+				reserva = fachada.getReserva();
+
+				for(int i = 0; i < reserva.size();i++){
+
+					if(textAreaReservaListaFeitas.getSelectedValue().contains(Long.toString(reserva.get(i).getId()))){
+
+						System.out.println(i);
+
+						TelaAlterarReserva telaReserva = new TelaAlterarReserva();
+
+						String strDataInicio = reserva.get(i).getInicioReserva().toString();
+						String strDataFim = reserva.get(i).getFimReserva().toString();
+
+						telaReserva.getTextFieldIdReserva().setText(Long.toString(reserva.get(i).getId()));
+						telaReserva.getTextFieldReservaDataEntrada().setText(strDataInicio);
+						telaReserva.getTextFieldReservaDataSaida().setText(strDataFim);
+						telaReserva.getTextFieldReservaIdAcomodacao().setText(Long.toString(reserva.get(i).getIdAcomodacao()));
+						telaReserva.setId(reserva.get(i).getId());
+
+					}
+				}							
 			}
 		});
 
@@ -710,73 +761,27 @@ public class MenuPrincipal {
 		lbldiaria.setBounds(318, 36, 58, 14);
 		panelAcomodacaoCadastro.add(lbldiaria);
 
-		JPanel panelAcomodacaoEdit = new JPanel();
-		tabbedPaneAcomodacao.addTab("Modificar Acomodação", null, panelAcomodacaoEdit, null);
-		panelAcomodacaoEdit.setLayout(null);
-
-		JLabel lblDigiteOId = new JLabel("Digite o ID da Acomodação");
-		lblDigiteOId.setBounds(144, 11, 151, 14);
-		panelAcomodacaoEdit.add(lblDigiteOId);
-
-		textFieldAcomodaçãoBuscaEdit = new JTextField();
-		textFieldAcomodaçãoBuscaEdit.setBounds(167, 36, 106, 20);
-		panelAcomodacaoEdit.add(textFieldAcomodaçãoBuscaEdit);
-		textFieldAcomodaçãoBuscaEdit.setColumns(10);
-
-		JButton btnAcomodacaoAlterar = new JButton("Alterar");
-
-		btnAcomodacaoAlterar.setBounds(141, 67, 156, 23);
-		panelAcomodacaoEdit.add(btnAcomodacaoAlterar);
-
-		JLabel label = new JLabel("Numero da Acomodação");
-		label.setBounds(10, 135, 148, 14);
-		panelAcomodacaoEdit.add(label);
-
-		JLabel label_1 = new JLabel("Valor da Acomodação");
-		label_1.setBounds(10, 157, 134, 14);
-		panelAcomodacaoEdit.add(label_1);
-
-		textFieldAcomodacaoAlterarNum = new JTextField();
-		textFieldAcomodacaoAlterarNum.setColumns(10);
-		textFieldAcomodacaoAlterarNum.setBounds(168, 132, 171, 20);
-		panelAcomodacaoEdit.add(textFieldAcomodacaoAlterarNum);
-
-		textFieldAcomodacaoValorNovo = new JTextField();
-		textFieldAcomodacaoValorNovo.setColumns(10);
-		textFieldAcomodacaoValorNovo.setBounds(167, 154, 171, 20);
-		panelAcomodacaoEdit.add(textFieldAcomodacaoValorNovo);
-
-		JLabel label_2 = new JLabel("(Diária)");
-		label_2.setBounds(353, 157, 66, 14);
-		panelAcomodacaoEdit.add(label_2);
-
-		JLabel lblModificar = new JLabel("Modificar");
-		lblModificar.setBounds(200, 101, 73, 14);
-		panelAcomodacaoEdit.add(lblModificar);
-
-		JLabel lblDescrio = new JLabel("Descrição");
-		lblDescrio.setBounds(10, 186, 106, 14);
-		panelAcomodacaoEdit.add(lblDescrio);
-
-		JTextArea textAreaAcomodacaoNovaDescricao = new JTextArea();
-		textAreaAcomodacaoNovaDescricao.setBounds(10, 203, 254, 60);
-		panelAcomodacaoEdit.add(textAreaAcomodacaoNovaDescricao);
-
-		JButton btnAcomodacaoModificarAcomodacao = new JButton("Modificar Acomodação");
-		btnAcomodacaoModificarAcomodacao.setBounds(274, 213, 175, 39);
-		panelAcomodacaoEdit.add(btnAcomodacaoModificarAcomodacao);
-
 		JPanel panelAcomodacaoListar = new JPanel();
 		tabbedPaneAcomodacao.addTab("Listar Acomodações", null, panelAcomodacaoListar, null);
 		panelAcomodacaoListar.setLayout(null);
 
-		JTextArea textAreaAcomodacaoListar = new JTextArea();
-		textAreaAcomodacaoListar.setBounds(0, 0, 459, 224);
-		panelAcomodacaoListar.add(textAreaAcomodacaoListar);
+		JScrollPane scrollPaneAcomodacao = new JScrollPane();
+		scrollPaneAcomodacao.setBounds(0, 0, 459, 224);
+		panelAcomodacaoListar.add(scrollPaneAcomodacao);
+
+		DefaultListModel<String> modeloAcomodacao = new DefaultListModel<String>();
+		JList<String> textAreaAcomodacaoListar = new JList<String>(modeloAcomodacao);
+
+		textAreaAcomodacaoListar.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPaneAcomodacao.setViewportView(textAreaAcomodacaoListar);
 
 		JButton btnAcomodacaoListar = new JButton("Listar");
-		btnAcomodacaoListar.setBounds(162, 235, 125, 23);
+		btnAcomodacaoListar.setBounds(37, 235, 125, 23);
 		panelAcomodacaoListar.add(btnAcomodacaoListar);
+
+		JButton btnAcomodacaoAlterar = new JButton("Alterar");
+		btnAcomodacaoAlterar.setBounds(289, 235, 125, 23);
+		panelAcomodacaoListar.add(btnAcomodacaoAlterar);
 
 		btnAcomodacaoListar.addActionListener(new ActionListener() {
 
@@ -785,55 +790,44 @@ public class MenuPrincipal {
 
 				List<Acomodacao> acomodacao = new ArrayList<Acomodacao>();
 				acomodacao = fachada.getAcomodacao();
-
-				String global = "";
+				modeloAcomodacao.clear();
 
 				for(int i = 0; i < acomodacao.size();i++){
 
-					String s;
-					s = acomodacao.get(i).getId() + "        " + acomodacao.get(i).getNumero() + "\t" + acomodacao.get(i).getValor_diaria()
-							+ "\t" + acomodacao.get(i).getDescricao() + "\t" + acomodacao.get(i).isDisponivel() + "\n";
-
-					global += s;
-
-					textAreaAcomodacaoListar.setText("");
-
-					textAreaAcomodacaoListar.setText(global);
+					modeloAcomodacao.addElement(acomodacao.get(i).getId() + "     |     " + acomodacao.get(i).getNumero() + "     |     " + acomodacao.get(i).getValor_diaria() + "     |     " + acomodacao.get(i).getDescricao() + "\n");
 				}
-
 			}				
 
+		});
+
+		btnAcomodacaoAlterar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				List<Acomodacao> acomodacao = new ArrayList<Acomodacao>();
+				acomodacao = fachada.getAcomodacao();
+
+				for(int i = 0; i < acomodacao.size();i++){
+
+					if(textAreaAcomodacaoListar.getSelectedValue().contains(Long.toString(acomodacao.get(i).getId()))){
+
+
+						TelaAlterarAcomodacao telaAcomodacao = new TelaAlterarAcomodacao();
+
+						telaAcomodacao.getTextFieldAcomodacaoNum().setText(Integer.toString(acomodacao.get(i).getNumero()));;
+						telaAcomodacao.getTextFieldAcomodacaoValor().setText(Double.toString(acomodacao.get(i).getValor_diaria()));
+						telaAcomodacao.getTextAreaAcomodacaoDesc().setText(acomodacao.get(i).getDescricao());
+						telaAcomodacao.setId(acomodacao.get(i).getId());
+
+					}
+				}				
+			}
 		});
 
 		tabbedPaneAcomodacao.setVisible(false);
 
 		//FINAL DO TABBED PANE DA ACOMODAÇÃO
-
-		label.setVisible(false);
-		textFieldAcomodacaoAlterarNum.setVisible(false);
-		label_1.setVisible(false);
-		textFieldAcomodacaoValorNovo.setVisible(false);
-		label_2.setVisible(false);
-		lblModificar.setVisible(false);
-		lblDescrio.setVisible(false);
-		textAreaAcomodacaoNovaDescricao.setVisible(false);
-		btnAcomodacaoModificarAcomodacao.setVisible(false);
-
-		btnAcomodacaoAlterar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-				label.setVisible(true);
-				textFieldAcomodacaoAlterarNum.setVisible(true);
-				label_1.setVisible(true);
-				textFieldAcomodacaoValorNovo.setVisible(true);
-				label_2.setVisible(true);
-				lblModificar.setVisible(true);
-				lblDescrio.setVisible(true);
-				textAreaAcomodacaoNovaDescricao.setVisible(true);
-				btnAcomodacaoModificarAcomodacao.setVisible(true);
-
-			}
-		});
 
 		btnClientes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -884,5 +878,5 @@ public class MenuPrincipal {
 		});
 	}
 
-		
+
 }

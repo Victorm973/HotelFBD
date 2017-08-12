@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -66,7 +65,30 @@ public class ReservaDao implements IReservaDao {
     }
 	@Override
 	public boolean editar(Reserva reserva) {
-		// TODO Auto-generated method stub
+		try{
+			statment = conexaoPost.prepareStatement(SqlUtilReserva.UPDDATE_RESERVA);
+
+			statment.setDate(1, new Date(reserva.getInicioReserva().getTime()));
+            statment.setDate(2, new Date(reserva.getFimReserva().getTime()));
+			statment.setLong(3, reserva.getIdAcomodacao());
+			statment.setLong(4, reserva.getId());
+
+			statment.execute();
+
+			JOptionPane.showMessageDialog(null, "Reserva Atualizada com Sucesso!!!");
+
+			return true;
+
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+
+			try {
+				conexaoPost.rollback();
+			} catch (SQLException ex1) {
+				ex1.printStackTrace();
+			}
+		}
 		return false;
 	}
 

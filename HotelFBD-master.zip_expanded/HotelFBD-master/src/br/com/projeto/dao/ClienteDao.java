@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import br.com.projeto.entidades.Cliente;
 import br.com.projeto.util.ConnectionFactory;
 import br.com.projeto.util.SqlUtilCliente;
-import br.com.projeto.view.MenuPrincipal;
 
 public class ClienteDao implements IClienteDao {
 

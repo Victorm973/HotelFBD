@@ -7,6 +7,9 @@ public class SqlUtilAcomodacao {
 	public static final String SELECT_ACOMODACAO_ULTIMO_REGISTRO = "SELECT * FROM acomodacao ORDER BY id DESC LIMIT 1";
 	
 	public static final String SELECT_ACOMODACAO_ALL = "SELECT * from acomodacao;";
+	
+    public static final String UPDDATE_ACOMODACAO = "UPDATE acomodacao set numero = ?, valor_diaria = ?, descricao = ? where id = (?);";
+
 
 	public SqlUtilAcomodacao() {
 	}
