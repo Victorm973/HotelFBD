@@ -105,6 +105,7 @@ public class MenuPrincipal {
 		frame.setBounds(100, 100, 500, 430);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setLocationRelativeTo(null);
 
 		JLabel lblMenuPrincipal = new JLabel("Menu Principal");
 		lblMenuPrincipal.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
@@ -243,7 +244,7 @@ public class MenuPrincipal {
 			public void actionPerformed(ActionEvent e1) {
 
 				cliente = new Cliente();
-				
+
 				cliente.setNome(textFieldClienteNome.getText());
 				cliente.setCpf(textFieldClienteCPF.getText());
 				cliente.setIdentidade(textFieldClienteRG.getText());
@@ -320,12 +321,12 @@ public class MenuPrincipal {
 				cliente = fachada.getClientes();
 
 				for(int i = 0; i < cliente.size();i++){
-					
+
 					if(textAreaClienteInfoClienteBusca.isSelectionEmpty()){
 						JOptionPane.showMessageDialog(null, "Nenhum Cliente Selecionado!!! \n Selecione algum Cliente!");
 						break;
 					}
-					
+
 					if(textAreaClienteInfoClienteBusca.getSelectedValue().contains(cliente.get(i).getCpf())){
 
 
@@ -341,7 +342,7 @@ public class MenuPrincipal {
 						telaCliente.getTextFieldClienteCidade().setText(cliente.get(i).getCidade());
 						telaCliente.getTextFieldClienteUF().setText(cliente.get(i).getUf());
 						telaCliente.getTextFieldClienteCep().setText(cliente.get(i).getCep());
-						
+
 					}
 				}
 			}
@@ -401,6 +402,11 @@ public class MenuPrincipal {
 					servico.setDescricao(textAreaServicoDescriçãoCadServ.getText());
 
 					fachada.salvarOuEditarServico(servico);
+
+					textFieldServicoCodigoCadServ.setText("");
+					textFieldServicoValorCadserv.setText("");
+					textAreaServicoDescriçãoCadServ.setText("");
+
 
 				} catch (Exception e2) {
 					e2.printStackTrace();
@@ -498,6 +504,11 @@ public class MenuPrincipal {
 
 				for(int i = 0; i < servico.size();i++){
 
+					if(textAreaServicoListaServicos.isSelectionEmpty()){
+						JOptionPane.showMessageDialog(null, "Nenhum Serviço Selecionado!!! \n Selecione algum Serviço!");
+						break;
+					}
+
 					if(textAreaServicoListaServicos.getSelectedValue().contains(Long.toString(servico.get(i).getId()))){
 
 
@@ -570,38 +581,42 @@ public class MenuPrincipal {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				reserva = new Reserva();
-
-				reserva.setCpfCliente(textFieldReservaCPFCliente.getText());
-				reserva.setIdAcomodacao(Long.parseLong(textFieldReservaIDAcomodacao.getText()));
-
-				String strDataInicio = textFieldReservaDataEntrada.getText();
-				String strDataFim = textFieldReservaDataSaida.getText();
-
-				System.out.println(textFieldReservaDataEntrada.getText());
-
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
 				try {
+					reserva = new Reserva();
+
+					reserva.setCpfCliente(textFieldReservaCPFCliente.getText());
+					reserva.setIdAcomodacao(Long.parseLong(textFieldReservaIDAcomodacao.getText()));
+
+					String strDataInicio = textFieldReservaDataEntrada.getText();
+					String strDataFim = textFieldReservaDataSaida.getText();
+
+					System.out.println(textFieldReservaDataEntrada.getText());
+
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+
 					Date dateI = sdf.parse(strDataInicio);
 
 					Calendar c = Calendar.getInstance();
 					c.setTime(dateI);
 					reserva.setInicioReserva(dateI);
 
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-
-				try {
 					Date dateF = sdf.parse(strDataFim);
 					reserva.setFimReserva(dateF);
 
 				} catch (Exception e1) {
 					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "ERRO! \n Campos Vazios ou Inválidos!!!");
+
 				}
+
 				fachada.salvarOuEditarReserva(reserva);
+
+				textFieldReservaCPFCliente.setText("");
+				textFieldReservaIDAcomodacao.setText("");
+				textFieldReservaDataEntrada.setText("");
+				textFieldReservaDataSaida.setText("");			
+
 			}
 		});
 
@@ -668,6 +683,11 @@ public class MenuPrincipal {
 				reserva = fachada.getReserva();
 
 				for(int i = 0; i < reserva.size();i++){
+
+					if(textAreaReservaListaFeitas.isSelectionEmpty()){
+						JOptionPane.showMessageDialog(null, "Nenhuma Reserva Selecionada!!! \n Selecione alguma Reserva!");
+						break;
+					}
 
 					if(textAreaReservaListaFeitas.getSelectedValue().contains(Long.toString(reserva.get(i).getId()))){
 
@@ -747,6 +767,11 @@ public class MenuPrincipal {
 					acomodacao.setDisponivel(true);
 
 					fachada.salvarOuEditarAcomodacao(acomodacao);
+
+					textFieldAcomodacaoCadNum.setText("");
+					textFieldAcomodacaoCadValor.setText("");
+					textAreaAcomodacaoCadDesc.setText("");
+
 				} catch (Exception e2) {
 
 					e2.printStackTrace();
@@ -810,8 +835,12 @@ public class MenuPrincipal {
 
 				for(int i = 0; i < acomodacao.size();i++){
 
-					if(textAreaAcomodacaoListar.getSelectedValue().contains(Long.toString(acomodacao.get(i).getId()))){
+					if(textAreaAcomodacaoListar.isSelectionEmpty()){
+						JOptionPane.showMessageDialog(null, "Nenhuma Acomodação Selecionada!!! \n Selecione alguma Acomodação!");
+						break;
+					}
 
+					if(textAreaAcomodacaoListar.getSelectedValue().contains(Long.toString(acomodacao.get(i).getId()))){
 
 						TelaAlterarAcomodacao telaAcomodacao = new TelaAlterarAcomodacao();
 
