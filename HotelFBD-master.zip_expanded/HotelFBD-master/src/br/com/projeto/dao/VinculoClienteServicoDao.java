@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import br.com.projeto.entidades.Cliente;
-import br.com.projeto.entidades.Servico;
 import br.com.projeto.entidades.VinculoClienteServico;
 import br.com.projeto.util.ConnectionFactory;
-import br.com.projeto.util.SqlUtilCliente;
 import br.com.projeto.util.SqlUtilVinculo;
 
 public class VinculoClienteServicoDao implements IVinculoClienteServicoDao {
@@ -43,6 +43,9 @@ public class VinculoClienteServicoDao implements IVinculoClienteServicoDao {
 
 			result.next();
 			vinculo.setId(new Long(result.getInt("id")));
+			
+			  JOptionPane.showMessageDialog(null, "Serviço Registrado!!!");
+			
 			return vinculo;
 
 		} catch (Exception ex) {
