@@ -52,7 +52,7 @@ public class UtilCriaTelas {
 	private JTextField textFieldReservaDataEntrada;
 	private JTextField textFieldReservaDataSaida;
 	private JTextField textFieldReservaIDAcomodacao;
-	private JTextField textFieldReservaListaApts;
+	private JList textFieldReservaListaApts;
 	private JTextField textFieldAcomodacaoCadNum;
 	private JTextField textFieldAcomodacaoCadValor;
 	private JTextField textFieldAcomodaçãoBuscaEdit;
@@ -96,5 +96,6 @@ public class UtilCriaTelas {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
+		
 	}
 }

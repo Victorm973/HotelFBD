@@ -119,5 +119,10 @@ public class CoreFacade implements ICoreFacade{
 	public List<Reserva> getReserva() {
 		return reservaBusiness.getAll();
 	}
+	
+	public List<VinculoClienteServico> getVinculo(Cliente cliente){
+		
+		return vinculoClienteServicoBusiness.getAll(cliente);
+	}
     
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.projeto.dao.IVinculoClienteServicoDao;
 import br.com.projeto.dao.VinculoClienteServicoDao;
+import br.com.projeto.entidades.Cliente;
 import br.com.projeto.entidades.VinculoClienteServico;
 
 public class VinculoClienteServicoBusiness implements IVinculoClienteServicoBusiness {
@@ -40,9 +41,9 @@ public class VinculoClienteServicoBusiness implements IVinculoClienteServicoBusi
 	}
 
 	@Override
-	public List<VinculoClienteServico> getAll() {
+	public List<VinculoClienteServico> getAll(Cliente cliente) {
 		// TODO Auto-generated method stub
-		return null;
+		return vinculoClienteServicoDao.getAll(cliente);
 	}
 
 }

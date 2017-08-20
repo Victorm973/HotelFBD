@@ -23,6 +23,7 @@ public interface ICoreFacade {
     public boolean salvarOuEditarVinculoClienteServico(VinculoClienteServico vinculo);
     public VinculoClienteServico buscarVinculoClienteServicoPorId(Long id);
     public List<VinculoClienteServico> getVinculoClienteServico();
+    public List<VinculoClienteServico> getVinculo(Cliente cliente);
     
     public boolean salvarOuEditarAcomodacao(Acomodacao acomodacao);
     public Acomodacao buscarAcomodacaoPorId(Long id);

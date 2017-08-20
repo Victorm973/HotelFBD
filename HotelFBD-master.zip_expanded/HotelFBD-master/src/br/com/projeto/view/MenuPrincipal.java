@@ -46,7 +46,6 @@ public class MenuPrincipal {
 	private JTextField textFieldClienteCidade;
 	private JTextField textFieldClienteCep;
 	private JTextField textFieldClienteUF;
-	private JTextField textFieldClienteBuscarCPF;
 	private JTextField textFieldServicoIDServico;
 	private JTextField textFieldServicoCPFServico;
 	private JTextField textFieldServicoCodigoCadServ;
@@ -285,7 +284,7 @@ public class MenuPrincipal {
 		textAreaClienteInfoClienteBusca.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JButton btnClienteListarTodos = new JButton("Listar Todos os Clientes");
-		btnClienteListarTodos.setBounds(10, 233, 172, 23);
+		btnClienteListarTodos.setBounds(268, 8, 172, 23);
 		panelClientePesquisa.add(btnClienteListarTodos);
 		tabbedPaneCliente.setVisible(false);
 
@@ -310,6 +309,15 @@ public class MenuPrincipal {
 		JButton btnClienteEditarInformacoes = new JButton("Editar Informações");
 		btnClienteEditarInformacoes.setBounds(279, 233, 161, 23);
 		panelClientePesquisa.add(btnClienteEditarInformacoes);
+		
+		JLabel lblIdCpf = new JLabel(" ID     |          CPF          |     Nome");
+		lblIdCpf.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblIdCpf.setBounds(10, 11, 430, 14);
+		panelClientePesquisa.add(lblIdCpf);
+		
+		JButton btnMostrarDbitos = new JButton("Mostrar D\u00E9bitos");
+		btnMostrarDbitos.setBounds(10, 233, 166, 23);
+		panelClientePesquisa.add(btnMostrarDbitos);
 		tabbedPaneCliente.setVisible(false);
 
 		btnClienteEditarInformacoes.addActionListener(new ActionListener() {
@@ -345,6 +353,50 @@ public class MenuPrincipal {
 
 					}
 				}
+			}
+		});
+		
+		btnMostrarDbitos.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				List<Cliente> cliente = new ArrayList<Cliente>();
+				cliente = fachada.getClientes();
+
+				for(int i = 0; i < cliente.size();i++){
+
+					if(textAreaClienteInfoClienteBusca.isSelectionEmpty()){
+						JOptionPane.showMessageDialog(null, "Nenhum Cliente Selecionado!!! \n Selecione algum Cliente!");
+						break;
+					}
+
+					if(textAreaClienteInfoClienteBusca.getSelectedValue().contains(cliente.get(i).getCpf())){
+				
+							TelaListaVinculos telaListVinc = new TelaListaVinculos();
+				
+							telaListVinc.getLblNomedocliente().setText(cliente.get(i).getNome());
+							
+							List<VinculoClienteServico> vinculo = new ArrayList<VinculoClienteServico>();
+							double aux = 0;
+							
+							vinculo = fachada.getVinculo(cliente.get(i));
+							
+							for(int g = 0; g < vinculo.size(); g++) {
+								
+								telaListVinc.getDefaultVinculo().addElement(vinculo.get(g).getNomeServicos());
+								aux += vinculo.get(g).getValor();
+								
+							}
+							
+							
+							telaListVinc.getTextFieldVinculoValores().setText(String.valueOf(aux));
+							
+				
+					}
+					
+				}
+				
 			}
 		});
 
@@ -460,7 +512,7 @@ public class MenuPrincipal {
 		panelListaServico.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 0, 455, 220);
+		scrollPane.setBounds(10, 36, 439, 184);
 		panelListaServico.add(scrollPane);
 
 		DefaultListModel<String> modeloServico = new DefaultListModel<String>();
@@ -493,6 +545,11 @@ public class MenuPrincipal {
 		JButton btnAlterarServico = new JButton("Alterar Serviço");
 		btnAlterarServico.setBounds(296, 231, 122, 23);
 		panelListaServico.add(btnAlterarServico);
+		
+		JLabel lblNewLabel1 = new JLabel("ID   |       C\u00F3digo       |     Valor      |      Descri\u00E7\u00E3o");
+		lblNewLabel1.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblNewLabel1.setBounds(10, 11, 439, 14);
+		panelListaServico.add(lblNewLabel1);
 
 		btnAlterarServico.addActionListener(new ActionListener() {
 
@@ -523,7 +580,7 @@ public class MenuPrincipal {
 				}
 			}
 		});
-
+		
 		tabbedPaneServicos.setVisible(false);
 
 
@@ -619,12 +676,15 @@ public class MenuPrincipal {
 
 			}
 		});
+		
+		JScrollPane scrollPane2 = new JScrollPane();
+		scrollPane.setBounds(10, 170, 430, 93);
+		panelRealizarReserva.add(scrollPane);
 
-
-		textFieldReservaListaApts = new JTextField();
-		textFieldReservaListaApts.setBounds(10, 145, 430, 118);
-		panelRealizarReserva.add(textFieldReservaListaApts);
-		textFieldReservaListaApts.setColumns(10);
+		DefaultListModel<String> modeloReservaAcomodacao = new DefaultListModel<String>();
+		JList<String> textFieldReservaListaApts = new JList<String>(modeloReservaAcomodacao);
+		textFieldReservaListaApts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPane2.setViewportView(textFieldReservaListaApts);
 
 		JLabel lblAcomodaesDisponveis = new JLabel("Acomodações Disponíveis");
 		lblAcomodaesDisponveis.setBounds(158, 120, 164, 14);
@@ -633,17 +693,23 @@ public class MenuPrincipal {
 		JButton btnReservaListarAcomodacoes = new JButton("Listar Acomodações");
 		btnReservaListarAcomodacoes.setBounds(303, 80, 135, 39);
 		panelRealizarReserva.add(btnReservaListarAcomodacoes);
+		
+		JLabel lblIdQuartos = new JLabel(" ID  |  N\u00BA do Quarto  |   Valor Di\u00E1ria  |   Descri\u00E7\u00E3o");
+		lblIdQuartos.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblIdQuartos.setBounds(10, 145, 428, 14);
+		panelRealizarReserva.add(lblIdQuartos);
 
 		JPanel panelReservasRealizadas = new JPanel();
 		tabbedPaneReserva.addTab("Lista de Reservas Realizadas", null, panelReservasRealizadas, null);
 		panelReservasRealizadas.setLayout(null);
 
 		JScrollPane scrollPaneReserva = new JScrollPane();
-		scrollPaneReserva.setBounds(10, 29, 430, 200);
+		scrollPaneReserva.setBounds(10, 36, 439, 193);
 		panelReservasRealizadas.add(scrollPaneReserva);
 
 		DefaultListModel<String> modeloReserva = new DefaultListModel<String>();
 		JList<String> textAreaReservaListaFeitas = new JList<String>(modeloReserva);
+		textAreaReservaListaFeitas.setFont(new Font("Tahoma", Font.BOLD, 12));
 
 		textAreaReservaListaFeitas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPaneReserva.setViewportView(textAreaReservaListaFeitas);
@@ -655,6 +721,12 @@ public class MenuPrincipal {
 		JButton btnReservaAtualizar = new JButton("Atualizar Reserva");
 		btnReservaAtualizar.setBounds(303, 240, 135, 23);
 		panelReservasRealizadas.add(btnReservaAtualizar);
+		
+		JLabel lblIdC = new JLabel("ID  |   Entrada   |     Sa\u00EDda    |      CPF Cliente     |      ID Acomoda\u00E7\u00E3o");
+		lblIdC.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblIdC.setBounds(10, 11, 439, 14);
+		panelReservasRealizadas.add(lblIdC);
+		
 
 		btnReservaListarReservas.addActionListener(new ActionListener() {
 
@@ -706,6 +778,22 @@ public class MenuPrincipal {
 
 					}
 				}							
+			}
+		});
+		
+		btnReservaListarAcomodacoes.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				List<Acomodacao> acomodacao = new ArrayList<Acomodacao>();
+				acomodacao = fachada.getAcomodacao();
+				modeloReservaAcomodacao.clear();
+
+				for(int i = 0; i < acomodacao.size();i++){
+
+					modeloReservaAcomodacao.addElement(acomodacao.get(i).getId() + "     |     " + acomodacao.get(i).getNumero() + "     |     " + acomodacao.get(i).getValor_diaria() + "     |     " + acomodacao.get(i).getDescricao() + "\n");
+				}
 			}
 		});
 
@@ -791,7 +879,7 @@ public class MenuPrincipal {
 		panelAcomodacaoListar.setLayout(null);
 
 		JScrollPane scrollPaneAcomodacao = new JScrollPane();
-		scrollPaneAcomodacao.setBounds(0, 0, 459, 224);
+		scrollPaneAcomodacao.setBounds(10, 35, 439, 189);
 		panelAcomodacaoListar.add(scrollPaneAcomodacao);
 
 		DefaultListModel<String> modeloAcomodacao = new DefaultListModel<String>();
@@ -807,6 +895,11 @@ public class MenuPrincipal {
 		JButton btnAcomodacaoAlterar = new JButton("Alterar");
 		btnAcomodacaoAlterar.setBounds(289, 235, 125, 23);
 		panelAcomodacaoListar.add(btnAcomodacaoAlterar);
+		
+		JLabel lblIdNuba = new JLabel(" ID  |  N\u00BA do Quarto  |   Valor Di\u00E1ria  |   Descri\u00E7\u00E3o");
+		lblIdNuba.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblIdNuba.setBounds(10, 11, 439, 14);
+		panelAcomodacaoListar.add(lblIdNuba);
 
 		btnAcomodacaoListar.addActionListener(new ActionListener() {
 
